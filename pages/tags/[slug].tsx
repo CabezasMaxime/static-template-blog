@@ -1,15 +1,18 @@
 import { GetStaticProps, NextPage } from "next"
 import CustomError from "../../components/CustomError"
-import { Posts } from "../../types/Post"
+import { Post, Posts } from "../../types/Post"
 import { ApiError } from "../../types/utils/ApiError"
-import { GetAllTags, GetOnePost, GetOneTagBySlug } from "../../utils/DataRequest"
+import { GetGlobal, GetPostBySlug, GetTags, GetTagBySlug } from "../../utils/DataRequest"
 import { ApiResponse } from "../../types/utils/ApiResponse"
 import ListPostView from "../../components/ListPostView"
 import { Tag, TagData, Tags } from "../../types/Tags"
 import { ResourcesData } from "../../types/utils/Resources"
+import { Global } from "../../types/Global"
 
 type TagPageProps = {
     tag: ResourcesData<TagData>,
+    tags: Tags,
+    global: Global,
     posts: Posts,
     error?: ApiError
 }
@@ -28,7 +31,7 @@ const TagPage: NextPage<TagPageProps> = ({tag, posts, error}) =>  {
 }
 
 export const getStaticPaths = async () => {
-    let tagsResponse: ApiResponse<Tags> = await GetAllTags()
+    let tagsResponse: ApiResponse<Tags> = await GetTags()
 
     if(tagsResponse.error) {
         return {
@@ -49,21 +52,27 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    let tagResponse: ApiResponse<Tag> = await GetOneTagBySlug(context.params.slug)
-    let postsReponse = await Promise.all(tagResponse.data.attributes.posts.data.map((e) => {
-        return GetOnePost(e.id)
+    let tagResponse: ApiResponse<Tag> = await GetTagBySlug(context.params.slug as string)
+    let postsReponse = await Promise.all<ApiResponse<Posts>>(tagResponse.data.attributes.posts.data.map((e) => {
+        return GetPostBySlug(e.attributes.slug)
     })).then(e => {
         return e.map(el => {
             return el.data
         })
     })
 
+    const tags: ApiResponse<Tags> = await GetTags()
+    const global: ApiResponse<Global> = await GetGlobal();
+
     return {
         props: {
+            tags: tags.data,
+            global: global.data,
             tag: tagResponse.data ? tagResponse.data : null,
             posts: postsReponse ? postsReponse : null,
             error: tagResponse.error ? tagResponse.error : null
-        }
+        },
+        revalidate: 3600
     }
 }
 

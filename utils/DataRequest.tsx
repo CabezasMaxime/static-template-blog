@@ -1,59 +1,59 @@
 import axios from "axios"
-import { Global } from "../types/Global"
-import { Posts, Post } from "../types/Post"
-import { Tag, Tags } from "../types/Tags"
-import { ApiResponse } from "../types/utils/ApiResponse"
 
-export async function GetGlobal(): Promise<ApiResponse<Global>> {
-    return await axios.get(`${process.env.NEXT_PUBLIC_FRONT_DOMAIN}/api/global?api_key=${process.env.BACKEND_API_TOKEN}`)
-    .then((res) => { return {data: res.data.data} })
-    .catch(e => {
-        let {status, name, message} = e.toJSON()
-        return {error: {status, name, message}}
-    })
+const headers = {
+    headers: {
+        'Authorization': `Bearer ${process.env.BACKEND_API_TOKEN}`
+    }
 }
 
-export async function GetPosts(): Promise<ApiResponse<Posts>> {
-    return await axios.get(`${process.env.NEXT_PUBLIC_FRONT_DOMAIN}/api/post?api_key=${process.env.BACKEND_API_TOKEN}`)
-    .then((res) => { return {data: res.data.data} })
-    .catch(e => {
-        let {status, name, message} = e.toJSON()
-        return {error: {status, name, message}}
-    })
+export async function GetGlobal() {
+    try {
+        const global = await axios.get(`${process.env.BACKEND_URL}/api/global?populate=*`, headers)
+        .then((res) => { return res.data })
+        return global
+    } catch(e: any) {
+        console.log("API ERROR GetGlobal", e)
+    }
 }
 
-export async function GetOnePost(id): Promise<ApiResponse<Post>> {
-    return await axios.get(`${process.env.NEXT_PUBLIC_FRONT_DOMAIN}/api/post?id=${id}&api_key=${process.env.BACKEND_API_TOKEN}`)
-    .then((res) => { return {data: res.data.data} })
-    .catch(e => {
-        let {status, name, message} = e.toJSON()
-        return {error: {status, name, message}}
-    })
+export async function GetTags() {
+    try {
+        const tags = await axios.get(`${process.env.BACKEND_URL}/api/tags?populate=*`, headers)
+        .then((res) => { return res.data })
+        return tags
+    } catch(e: any) {
+        console.log("API ERROR GetTags", e)
+    }
 }
 
-export async function GetOnePostBySlug(slug): Promise<ApiResponse<Post>> {
-    return await axios.get(`${process.env.NEXT_PUBLIC_FRONT_DOMAIN}/api/post?slug=${slug}&api_key=${process.env.BACKEND_API_TOKEN}`)
-    .then((res) => { return {data: res.data.data[0]} })
-    .catch(e => {
-        let {status, name, message} = e.toJSON()
-        return {error: {status, name, message}}
-    })
+export async function GetTagBySlug(slug: string) {
+    try {
+        const tag = await axios.get(`${process.env.BACKEND_URL}/api/tags?filters[slug][$eq]=${slug}&populate=*`, headers)
+        .then((res) => { return res.data })
+        tag.data = tag.data[0]
+        return tag
+    } catch(e: any) {
+        console.log("API ERROR GetTagsBySlug", e)
+    }
 }
 
-export async function GetAllTags(): Promise<ApiResponse<Tags>> {
-    return await axios.get(`${process.env.NEXT_PUBLIC_FRONT_DOMAIN}/api/tag?api_key=${process.env.BACKEND_API_TOKEN}`)
-    .then((res) => { return {data: res.data.data} })
-    .catch(e => {
-        let {status, name, message} = e.toJSON()
-        return {error: {status, name, message}}
-    })
+export async function GetPosts() {
+    try {
+        const posts = await axios.get(`${process.env.BACKEND_URL}/api/posts?populate=*`, headers)
+        .then((res) => { return res.data })
+        return posts
+    } catch(e: any) {
+        console.log("API ERROR GetPosts", e)
+    }
 }
 
-export async function GetOneTagBySlug(slug): Promise<ApiResponse<Tag>> {
-    return await axios.get(`${process.env.NEXT_PUBLIC_FRONT_DOMAIN}/api/tag?slug=${slug}&api_key=${process.env.BACKEND_API_TOKEN}`)
-    .then((res) => { return {data: res.data.data[0]} })
-    .catch(e => {
-        let {status, name, message} = e.toJSON()
-        return {error: {status, name, message}}
-    })
+export async function GetPostBySlug(slug: string) {
+    try {
+        const post = await axios.get(`${process.env.BACKEND_URL}/api/posts?filters[slug][$eq]=${slug}&populate=*`, headers)
+        .then((res) => { return res.data })
+        post.data = post.data[0]
+        return post
+    } catch(e: any) {
+        console.log("API ERROR GetPostsBySlug", e)
+    }
 }

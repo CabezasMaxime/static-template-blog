@@ -1,5 +1,5 @@
 import Link from "next/link"
-import Router from "next/router"
+import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { Global } from "../types/Global"
@@ -162,15 +162,25 @@ export const CloseButton = ({open, setOpen}) => {
 export default function NavBar({tags, global}: NavBarProps) {
     const [currentPage, setCurrentPage] = useState("")
     const [openNavMobile, setOpenNavMobile] = useState(false)
+    const [navTags, setNavTags] = useState([])
 
-    const navTags = tags.filter((e) => e.attributes.createPage == true && e.attributes.posts.data.length > 0)
+    const router = useRouter()
+    
+    useEffect(() => {
+        let _navTags = tags ? tags.filter((e) => e.attributes.createPage == true && e.attributes.posts.data.length > 0) : []
+        setNavTags(_navTags)
+    }, [])
 
     useEffect(() => {
-        if(currentPage != Router.router.query.slug) {
-            setCurrentPage(Router.router.query.slug as string)
+        if(currentPage != router.query.slug) {
+            setCurrentPage(router.query.slug as string)
             setOpenNavMobile(false)
         }
-    })
+    }, [router, currentPage])
+
+    if(navTags.length < 0 || !global) {
+        return <div>Loadgin ....</div>
+    }
 
     return (
         <Nav className={`${openNavMobile ? "nav-open" : "nav-close"}`}>

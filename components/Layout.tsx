@@ -1,4 +1,5 @@
 import Head from "next/head"
+import { useRouter } from "next/router"
 import styled, { AnyStyledComponent } from "styled-components"
 import { Global } from "../types/Global"
 import { Tags } from "../types/Tags"
@@ -27,6 +28,7 @@ const LayoutComponent: AnyStyledComponent = styled.div`
 
 export default function Layout({children, tags, global, pageProps}: LayoutPropsType) {
     const postImgUrl = pageProps.post ? pageProps.post.attributes.media.data.attributes.url : null
+
     return (
         <LayoutComponent>
             <Head>
@@ -35,7 +37,7 @@ export default function Layout({children, tags, global, pageProps}: LayoutPropsT
 
             <NavBar tags={tags} global={global} />
             <Header global={global} postImg={postImgUrl} />
-
+            
             <Container>
                 {children}
             </Container>

@@ -6,7 +6,7 @@ type CustomErrorProps = {
 }
 
 const CustomError = ({error}: CustomErrorProps) => {
-    return <Error statusCode={error.status} title={error.message} />
+    return <Error statusCode={error.status} title={error.message ? error.message : ""} />
 }
 
 export default CustomError

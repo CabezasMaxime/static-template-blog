@@ -1,6 +1,7 @@
 import styled, { AnyStyledComponent } from "styled-components"
 import { Global } from "../types/Global";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const HeaderComponent: AnyStyledComponent = styled.div`
     position: relative;
@@ -13,6 +14,10 @@ type HeaderProps = {
 }
 
 export default function Header({ global, postImg }: HeaderProps) {
+    if(!global) {
+        return <div>Loading ...</div>
+    }
+
     return (
         <HeaderComponent>
             {
@@ -31,7 +36,7 @@ export default function Header({ global, postImg }: HeaderProps) {
                         />
                     </div>
                 )
-                : <div style={{display: "flex", background: "#333333", height: "50vh", color: "white", fontSize: "50px"}}><div style={{margin: "auto"}}><p>No Header Image</p><p style={{fontSize: "14px", textAlign: "center"}}>( Choose image in backend, "Global header" )</p></div></div>
+                : <div style={{display: "flex", background: "#333333", height: "50vh", color: "white", fontSize: "50px"}}><div style={{margin: "auto"}}><p>No Header Image</p><p style={{fontSize: "14px", textAlign: "center"}}>{`( Choose image in backend, "Global header" )`}</p></div></div>
             }
 
         </HeaderComponent>

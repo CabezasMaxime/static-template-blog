@@ -97,7 +97,7 @@ export default function ListPostView({posts}: ListPostViewProps) {
   return (
       <ArticlesContentWrapper>
       {
-        [...posts, ...posts, ...posts, ...posts].map((post: ResourcesData<PostData>, index) => {
+        posts.map((post: ResourcesData<PostData>, index) => {
           return (
             <Link key={`article__preview__${index}`} href={`/articles/${post.attributes.slug}`}>
               <a>

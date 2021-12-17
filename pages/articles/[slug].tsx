@@ -4,11 +4,14 @@ import Link from "next/link"
 import { Post, PostData, Posts } from "../../types/Post"
 import { ApiError } from "../../types/utils/ApiError"
 import { ResourcesData } from "../../types/utils/Resources"
-import { GetOnePostBySlug, GetPosts } from "../../utils/DataRequest"
+import { GetGlobal, GetPostBySlug, GetPosts, GetTags } from "../../utils/DataRequest"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { ApiResponse } from "../../types/utils/ApiResponse"
 import styled from "styled-components"
+import { Tags } from "../../types/Tags"
+import { Global } from "../../types/Global"
+import { useRouter } from "next/router"
 
 type ArticleProps = {
     post: ResourcesData<PostData>,
@@ -88,13 +91,18 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    let postReponse: ApiResponse<Post> = await GetOnePostBySlug(context.params.slug)
+    let postReponse: ApiResponse<Post> = await GetPostBySlug(context.params.slug as string)
+    const tags: ApiResponse<Tags> = await GetTags()
+    const global: ApiResponse<Global> = await GetGlobal();
 
     return {
         props: {
+            tags: tags.data,
+            global: global.data,
             post: postReponse.data ? postReponse.data : null,
             error: postReponse.error ? postReponse.error : null
-        }
+        },
+        revalidate: 3600
     }
 }
 

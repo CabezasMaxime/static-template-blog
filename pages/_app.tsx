@@ -1,10 +1,5 @@
 import { createGlobalStyle, DefaultTheme, ThemeProvider } from 'styled-components'
 import Layout from '../components/Layout'
-import App from 'next/app'
-import { GetAllTags, GetGlobal } from '../utils/DataRequest'
-import { ApiResponse } from '../types/utils/ApiResponse'
-import { Tags } from '../types/Tags'
-import { Global } from '../types/Global'
 
 const GlobalStyle = createGlobalStyle`
   :root {
@@ -109,6 +104,7 @@ const theme: DefaultTheme = {
 }
 
 function MyApp({ Component, pageProps }) {
+
   return (
     <>
       <GlobalStyle />
@@ -119,18 +115,6 @@ function MyApp({ Component, pageProps }) {
       </ThemeProvider>
     </>
   )
-}
-
-MyApp.getInitialProps = async (appContext) => {
-  // calls page's `getInitialProps` and fills `appProps.pageProps`
-  const appProps = await App.getInitialProps(appContext);
-  const tags: ApiResponse<Tags> = await GetAllTags()
-  const global: ApiResponse<Global> = await GetGlobal();
-
-  appProps.pageProps.tags = tags.data
-  appProps.pageProps.global = global.data
-
-  return { ...appProps }
 }
 
 export default MyApp
