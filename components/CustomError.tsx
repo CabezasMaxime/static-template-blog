@@ -2,7 +2,7 @@ import Error from "next/error"
 import { ApiError } from "../types/utils/ApiError"
 
 type CustomErrorProps = {
-    error: ApiError   
+    error: ApiError
 }
 
 const CustomError = ({error}: CustomErrorProps) => {

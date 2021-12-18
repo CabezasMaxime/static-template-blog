@@ -11,7 +11,6 @@ import { ApiResponse } from "../../types/utils/ApiResponse"
 import styled from "styled-components"
 import { Tags } from "../../types/Tags"
 import { Global } from "../../types/Global"
-import { useRouter } from "next/router"
 
 type ArticleProps = {
     post: ResourcesData<PostData>,
@@ -28,8 +27,8 @@ const ArticleContainer = styled.div(({theme}) => `
 
 const Articles: NextPage<ArticleProps> = ({post, error}) =>  {
 
-    if(error) {
-        return <CustomError error={error} />
+    if(error || !post) {
+        return <CustomError error={error ? error : {status: 404}} />
     }
 
     return (
@@ -92,13 +91,9 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let postReponse: ApiResponse<Post> = await GetPostBySlug(context.params.slug as string)
-    const tags: ApiResponse<Tags> = await GetTags()
-    const global: ApiResponse<Global> = await GetGlobal();
 
     return {
         props: {
-            tags: tags.data,
-            global: global.data,
             post: postReponse.data ? postReponse.data : null,
             error: postReponse.error ? postReponse.error : null
         },

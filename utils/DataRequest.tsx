@@ -12,7 +12,7 @@ export async function GetGlobal() {
         .then((res) => { return res.data })
         return global
     } catch(e: any) {
-        console.log("API ERROR GetGlobal", e)
+        //console.log("API ERROR GetGlobal", e)
     }
 }
 
@@ -22,7 +22,7 @@ export async function GetTags() {
         .then((res) => { return res.data })
         return tags
     } catch(e: any) {
-        console.log("API ERROR GetTags", e)
+        //console.log("API ERROR GetTags", e)
     }
 }
 
@@ -33,7 +33,7 @@ export async function GetTagBySlug(slug: string) {
         tag.data = tag.data[0]
         return tag
     } catch(e: any) {
-        console.log("API ERROR GetTagsBySlug", e)
+        //console.log("API ERROR GetTagsBySlug", e)
     }
 }
 
@@ -43,7 +43,7 @@ export async function GetPosts() {
         .then((res) => { return res.data })
         return posts
     } catch(e: any) {
-        console.log("API ERROR GetPosts", e)
+        //console.log("API ERROR GetPosts", e)
     }
 }
 
@@ -54,6 +54,6 @@ export async function GetPostBySlug(slug: string) {
         post.data = post.data[0]
         return post
     } catch(e: any) {
-        console.log("API ERROR GetPostsBySlug", e)
+        //console.log("API ERROR GetPostsBySlug", e)
     }
 }

@@ -1,5 +1,7 @@
 import { createGlobalStyle, DefaultTheme, ThemeProvider } from 'styled-components'
 import Layout from '../components/Layout'
+import HeaderSeo from '../components/HeaderSeo'
+import { GetGlobal, GetTags } from '../utils/DataRequest'
 
 const GlobalStyle = createGlobalStyle`
   :root {
@@ -103,18 +105,30 @@ const theme: DefaultTheme = {
   },
 }
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, router, tags, global }) {
 
   return (
     <>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
-        <Layout tags={pageProps.tags} global={pageProps.global} pageProps={pageProps} >
+        <HeaderSeo router={router} pageProps={pageProps} />
+        <Layout tags={tags} global={global} pageProps={pageProps} >
           <Component {...pageProps} />
         </Layout>
       </ThemeProvider>
     </>
   )
+}
+
+
+MyApp.getInitialProps = async (ctx) => {
+  const tags = await GetTags()
+  const global = await GetGlobal()
+
+  return { 
+    tags: tags.data,
+    global: global.data
+  }
 }
 
 export default MyApp

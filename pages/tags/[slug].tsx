@@ -11,16 +11,14 @@ import { Global } from "../../types/Global"
 
 type TagPageProps = {
     tag: ResourcesData<TagData>,
-    tags: Tags,
-    global: Global,
     posts: Posts,
     error?: ApiError
 }
 
-const TagPage: NextPage<TagPageProps> = ({tag, posts, error}) =>  {
+const TagPage: NextPage<TagPageProps> = ({posts, error}) =>  {
 
-    if(error) {
-        return <CustomError error={error} />
+    if(error || !posts) {
+        return <CustomError error={error ? error : {status: 404}} />
     }
 
     return (
@@ -61,13 +59,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
         })
     })
 
-    const tags: ApiResponse<Tags> = await GetTags()
-    const global: ApiResponse<Global> = await GetGlobal();
-
     return {
         props: {
-            tags: tags.data,
-            global: global.data,
             tag: tagResponse.data ? tagResponse.data : null,
             posts: postsReponse ? postsReponse : null,
             error: tagResponse.error ? tagResponse.error : null

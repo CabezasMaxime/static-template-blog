@@ -23,14 +23,12 @@ const Description: AnyStyledComponent = styled.div`
 type HomeProps = {
   posts?: Posts
   error?: ApiError
-  tags: Tags
-  global: Global
 }
 
 const Home: NextPage<HomeProps> = ({posts, error}) => {
 
-  if(error) {
-    return <CustomError error={error} />
+  if(error || !posts) {
+    return <CustomError error={error ? error : {status: 404}} />
   }
 
   return (
@@ -48,13 +46,9 @@ const Home: NextPage<HomeProps> = ({posts, error}) => {
 export const getStaticProps: GetStaticProps = async (context) => {
   
   let postsReponse: ApiResponse<Posts> = await GetPosts()
-  const tags: ApiResponse<Tags> = await GetTags()
-  const global: ApiResponse<Global> = await GetGlobal();
 
   return {
     props: {
-      tags: tags.data ? tags.data : null,
-      global: global.data ? global.data : null,
       posts: postsReponse.data ? postsReponse.data : null,
       error: postsReponse.error ? postsReponse.error : null
     },

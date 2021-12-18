@@ -178,10 +178,6 @@ export default function NavBar({tags, global}: NavBarProps) {
         }
     }, [router, currentPage])
 
-    if(navTags.length < 0 || !global) {
-        return <div>Loadgin ....</div>
-    }
-
     return (
         <Nav className={`${openNavMobile ? "nav-open" : "nav-close"}`}>
             <CloseButton open={openNavMobile} setOpen={() => setOpenNavMobile(!openNavMobile)} />
