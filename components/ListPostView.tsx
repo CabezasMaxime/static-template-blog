@@ -1,5 +1,5 @@
 import styled, { AnyStyledComponent } from 'styled-components'
-import { Post, Posts, PostData } from "../types/Post"
+import { PostData } from "../types/Post"
 import Image from "next/image"
 import Link from "next/link"
 import { ResourcesData } from '../types/utils/Resources'
@@ -8,6 +8,7 @@ const ArticleCard: AnyStyledComponent = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  height: 100%;
   transition: 300ms;
   
   &:hover {
@@ -69,24 +70,38 @@ const ArticleCard: AnyStyledComponent = styled.div`
   .article-bottom {
     padding: 1rem;
     background: white;
+    height: 100%;
   }
 `
 
-const ArticlesContentWrapper: AnyStyledComponent = styled.div`
+const ArticlesContentWrapper: AnyStyledComponent = styled.div(({theme}) => {
+  return `
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem 5rem;
     
     width: 80%;
     margin: 2rem auto;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
     a {
-      flex: 1 1 29%;
-      min-width: 300px;
+      flex: 1 1 30%;
+      min-width: 250px;
+      max-width: 45%;
+      margin: 1rem;
+    }
+
+    @media(${theme.media.mobile}) {
+      margin: 2rem auto;
+      justify-content: center;
+
+      a {
+        flex: 1 1 29%;
+        min-width: 300px;
+        max-width: 100%;
+      }
     }
 `
+})
 
 type ListPostViewProps = {
     posts: ResourcesData<PostData>[]
@@ -97,7 +112,7 @@ export default function ListPostView({posts}: ListPostViewProps) {
   return (
       <ArticlesContentWrapper>
       {
-        posts.map((post: ResourcesData<PostData>, index) => {
+        [...posts, ...posts, ...posts].map((post: ResourcesData<PostData>, index) => {
           return (
             <Link key={`article__preview__${index}`} href={`/articles/${post.attributes.slug}`}>
               <a>

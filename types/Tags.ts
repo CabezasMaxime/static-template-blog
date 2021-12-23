@@ -1,10 +1,12 @@
 import { Posts } from "./Post";
-import { ResourcesData } from "./utils/Resources";
+import { Media } from "./utils/Media";
+import { Resources, ResourcesData } from "./utils/Resources";
 
 export type TagData = {
     label: string,
     createPage: boolean,
     slug: string,
+    media: Resources<ResourcesData<Media>>
     posts: {
         data: Posts
     }

@@ -33,11 +33,14 @@ const NavItem = styled.div`
 `
 
 const Nav = styled.nav(({theme}) => `
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: rgba(230, 230, 230, 1);
-    background: #333333;
+    background: rgba(0, 0, 0, 0.8);
     
     .close {
         display: none;
@@ -45,15 +48,17 @@ const Nav = styled.nav(({theme}) => `
 
     @media (${theme.media.mobile}) {
         &.nav-open {
-            display: flex;
             position: fixed;
+            right: 0;
+            display: flex;
             align-items: flex-end;
             flex-direction: column;
             z-index: 20;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             background: #222222;
             overflow: hidden;
+
             transition: 500ms;
 
             .brand {
@@ -79,12 +84,15 @@ const Nav = styled.nav(({theme}) => `
         &.nav-close {
             position: absolute;
             display: flex;
+            position: fixed;
+            height: 55px;
+            width: 55px;
+            right: 0;
             justify-content: flex-end;
             z-index: 20;
-            width: 100vw;
-            height: 80px;
-            background: #222222;
-
+            background: ${theme.colors.primary};
+            
+            box-shadow: 0 0 5px 0.8px rgba(0, 0, 0, 0.4);
             transition: 500ms;
 
             .brand {
@@ -106,8 +114,8 @@ const CloseButtonStyled = styled.div(({theme, open}) => `
         position: absolute;
         right: 0;
         top: 0;
-        height: 80px;
-        width: 80px;
+        height: 55px;
+        width: 55px;
 
         .middle {
             content: "";
@@ -150,7 +158,6 @@ type NavBarProps = {
     global: Global
 }
 
-
 export const CloseButton = ({open, setOpen}) => {
     return (
         <div onClick={() => setOpen()}>
@@ -165,7 +172,7 @@ export default function NavBar({tags, global}: NavBarProps) {
     const [navTags, setNavTags] = useState([])
 
     const router = useRouter()
-    
+
     useEffect(() => {
         let _navTags = tags ? tags.filter((e) => e.attributes.createPage == true && e.attributes.posts.data.length > 0) : []
         setNavTags(_navTags)
@@ -176,6 +183,17 @@ export default function NavBar({tags, global}: NavBarProps) {
             setCurrentPage(router.query.slug as string)
             setOpenNavMobile(false)
         }
+
+        if(!router.query.slug) {
+            setCurrentPage(router.pathname)
+            setOpenNavMobile(false)
+        }
+
+        if(router.asPath == "/") {
+            setCurrentPage(undefined)
+            setOpenNavMobile(false)
+        }
+
     }, [router, currentPage])
 
     return (
@@ -193,7 +211,7 @@ export default function NavBar({tags, global}: NavBarProps) {
                         return <NavItem className="navItem" key={`nav__tag__${index}`}><Link href={`${process.env.NEXT_PUBLIC_FRONT_DOMAIN}/tags/${tag.attributes.slug}`}><a style={{textDecoration: `${currentPage == tag.attributes.slug ? "underline" : "none"}`}}>{tag.attributes.label}</a></Link></NavItem>
                     }) : <></>
                 }
-                <NavItem className="navItem"><Link href={`${process.env.NEXT_PUBLIC_FRONT_DOMAIN}/contact`}><a>Contact</a></Link></NavItem>
+                <NavItem className="navItem"><Link href={`${process.env.NEXT_PUBLIC_FRONT_DOMAIN}/contact`}><a style={{textDecoration: `${currentPage == "/contact" ? "underline" : "none"}`}}>Contact</a></Link></NavItem>
             </NavItemContainer>
         </Nav>
     )

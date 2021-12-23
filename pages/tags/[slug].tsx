@@ -1,29 +1,31 @@
 import { GetStaticProps, NextPage } from "next"
 import CustomError from "../../components/CustomError"
-import { Post, Posts } from "../../types/Post"
+import { Posts } from "../../types/Post"
 import { ApiError } from "../../types/utils/ApiError"
-import { GetGlobal, GetPostBySlug, GetTags, GetTagBySlug } from "../../utils/DataRequest"
+import { GetPostBySlug, GetTags, GetTagBySlug } from "../../utils/DataRequest"
 import { ApiResponse } from "../../types/utils/ApiResponse"
 import ListPostView from "../../components/ListPostView"
 import { Tag, TagData, Tags } from "../../types/Tags"
 import { ResourcesData } from "../../types/utils/Resources"
-import { Global } from "../../types/Global"
+import Breadcrumb from "../../components/Breadcrumb"
+import { useRouter } from "next/router"
 
 type TagPageProps = {
     tag: ResourcesData<TagData>,
-    posts: Posts,
     error?: ApiError
 }
 
-const TagPage: NextPage<TagPageProps> = ({posts, error}) =>  {
+const TagPage: NextPage<TagPageProps> = ({tag, error}) =>  {
+    const router = useRouter()
 
-    if(error || !posts) {
+    if(error) {
         return <CustomError error={error ? error : {status: 404}} />
     }
 
     return (
         <div>
-            <ListPostView posts={posts} />
+            <Breadcrumb url={router.asPath} tag={tag.attributes} />
+            <ListPostView posts={tag.attributes.posts.data} />
         </div>
     )
 }
@@ -51,18 +53,10 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let tagResponse: ApiResponse<Tag> = await GetTagBySlug(context.params.slug as string)
-    let postsReponse = await Promise.all<ApiResponse<Posts>>(tagResponse.data.attributes.posts.data.map((e) => {
-        return GetPostBySlug(e.attributes.slug)
-    })).then(e => {
-        return e.map(el => {
-            return el.data
-        })
-    })
 
     return {
         props: {
             tag: tagResponse.data ? tagResponse.data : null,
-            posts: postsReponse ? postsReponse : null,
             error: tagResponse.error ? tagResponse.error : null
         },
         revalidate: 3600

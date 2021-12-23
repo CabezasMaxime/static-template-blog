@@ -5,9 +5,7 @@ import { Posts } from "../types/Post"
 import { ApiError } from "../types/utils/ApiError"
 import ListPostView from "../components/ListPostView"
 import { ApiResponse } from "../types/utils/ApiResponse"
-import { Tags } from "../types/Tags"
-import { Global } from "../types/Global"
-import { GetGlobal, GetPosts, GetTags } from "../utils/DataRequest"
+import { GetPosts } from "../utils/DataRequest"
 
 const Title: AnyStyledComponent = styled.div`
   font-size: ${({theme}) => theme.fontSize.xl};
@@ -44,7 +42,6 @@ const Home: NextPage<HomeProps> = ({posts, error}) => {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  
   let postsReponse: ApiResponse<Posts> = await GetPosts()
 
   return {
