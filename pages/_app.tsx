@@ -3,6 +3,7 @@ import Layout from '../components/Layout'
 import HeaderSeo from '../components/HeaderSeo'
 import { GetGlobal, GetSocials, GetTags } from '../utils/DataRequest'
 import App from 'next/app'
+import CustomError from '../components/CustomError'
 
 const GlobalStyle = createGlobalStyle(({theme}) => {
   return `
@@ -117,6 +118,10 @@ const theme: DefaultTheme = {
 
 function MyApp({ Component, pageProps, router }) {
   const { tags, global, socials } = pageProps
+
+  if(!tags || !global || !socials) {
+    return <CustomError error={{status: 404}} />
+  }
 
   return (
     <>

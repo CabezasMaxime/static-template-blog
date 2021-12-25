@@ -16,7 +16,7 @@ import ReactMKComponents from "../../components/markdown/ReactMkComponents"
 
 type ArticleProps = {
     post: ResourcesData<PostData>,
-    error?: ApiError
+    error: ApiError
 }
 
 const ArticleContainer = styled.div(({theme}) => `

@@ -11,7 +11,7 @@ import { useRouter } from "next/router"
 
 type TagPageProps = {
     tag: ResourcesData<TagData>,
-    error?: ApiError
+    error: ApiError
 }
 
 const TagPage: NextPage<TagPageProps> = ({tag, error}) =>  {
