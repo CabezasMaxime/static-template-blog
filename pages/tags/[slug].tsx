@@ -53,8 +53,9 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
     let tagResponse: ApiResponse<Tag> = await GetTagBySlug(context.params.slug as string)
+    let {data, error} = tagResponse
 
-    if(!tagResponse) {
+    if(!data || error) {
         return {
             props: {
                 tag: null,
@@ -65,8 +66,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     return {
         props: {
-            tag: tagResponse.data ? tagResponse.data : null,
-            error: tagResponse.error ? tagResponse.error : null
+            tag: data,
+            error: null
         },
         revalidate: 3600
     }
