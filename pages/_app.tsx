@@ -144,7 +144,7 @@ MyApp.getInitialProps = async (context) => {
   let appProps = await App.getInitialProps(context);
   appProps.pageProps.tags = tags.data ? tags.data : null
   appProps.pageProps.global = global.data ? global.data : null,
-  appProps.pageProps.socials = socials ? socials : null
+  appProps.pageProps.socials = socials.data ? socials : null
 
   return {
     ...appProps,
