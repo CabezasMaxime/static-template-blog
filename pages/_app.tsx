@@ -115,7 +115,9 @@ const theme: DefaultTheme = {
   },
 }
 
-function MyApp({ Component, pageProps, router, tags, global, socials }) {
+function MyApp({ Component, pageProps, router }) {
+  const { tags, global, socials } = pageProps
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -134,13 +136,13 @@ MyApp.getInitialProps = async (context) => {
   const global = await GetGlobal()
   const socials = await GetSocials()
   
-  const appProps = await App.getInitialProps(context);
+  let appProps = await App.getInitialProps(context);
+  appProps.pageProps.tags = tags.data ? tags.data : null
+  appProps.pageProps.global = global.data ? global.data : null,
+  appProps.pageProps.socials = socials ? socials : null
 
   return {
     ...appProps,
-    tags: tags.data ? tags.data : null,
-    global: global.data ? global.data : null,
-    socials: socials ? socials : null
   }
 }
 

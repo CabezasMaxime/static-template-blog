@@ -17,7 +17,7 @@ type TagPageProps = {
 const TagPage: NextPage<TagPageProps> = ({tag, error}) =>  {
     const router = useRouter()
 
-    if(error) {
+    if(error || !tag) {
         return <CustomError error={error ? error : {status: 404}} />
     }
 
