@@ -32,7 +32,7 @@ const TagPage: NextPage<TagPageProps> = ({tag, error}) =>  {
 export const getStaticPaths = async () => {
     let tagsResponse: ApiResponse<Tags> = await GetTags()
 
-    if(tagsResponse.error) {
+    if(!tagsResponse || tagsResponse.error) {
         return {
             paths: [],
             fallback: true,

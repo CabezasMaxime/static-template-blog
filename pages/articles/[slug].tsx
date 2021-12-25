@@ -103,7 +103,7 @@ const Articles: NextPage<ArticleProps> = ({post, error}) =>  {
 export const getStaticPaths = async () => {
     let postsResponse: ApiResponse<Posts> = await GetPosts()
 
-    if(postsResponse.error) {
+    if(!postsResponse || postsResponse.error) {
         return {
             paths: [],
             fallback: true,
