@@ -129,16 +129,15 @@ function MyApp({ Component, pageProps, router, tags, global, socials }) {
   )
 }
 
-
 MyApp.getInitialProps = async (ctx) => {
   const tags = await GetTags()
   const global = await GetGlobal()
   const socials = await GetSocials()
 
   return { 
-    tags: tags.data,
-    global: global.data,
-    socials: socials
+    tags: tags.data ? tags.data : null,
+    global: global.data ? global.data : null,
+    socials: socials ? socials : null
   }
 }
 

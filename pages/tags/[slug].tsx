@@ -40,6 +40,7 @@ export const getStaticPaths = async () => {
     }
 
     let tagFilter = tagsResponse.data.filter((e) => e.attributes.createPage == true)
+
     let tableOfPaths = tagFilter.map((e)=> {
         return { params: {slug: e.attributes.slug}}
     })
