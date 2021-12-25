@@ -122,7 +122,16 @@ function MyApp({ Component, pageProps, router }) {
   if(!tags || !global || !socials) {
     return <CustomError error={{status: 404}} />
   }
-
+  return (
+    <>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </>
+  )
+}
+  /*
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -135,6 +144,7 @@ function MyApp({ Component, pageProps, router }) {
     </>
   )
 }
+*/
 
 MyApp.getInitialProps = async (context) => {
   const tags = await GetTags()
