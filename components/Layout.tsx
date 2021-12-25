@@ -3,6 +3,7 @@ import styled, { AnyStyledComponent } from "styled-components"
 import { Global } from "../types/Global"
 import { Socials } from "../types/Socials"
 import { Tags } from "../types/Tags"
+import CustomError from "./CustomError"
 import Header from "./Header"
 import NavBar from "./NavBar"
 
@@ -29,6 +30,10 @@ const LayoutComponent: AnyStyledComponent = styled.div`
 
 export default function Layout({children, tags, global, socials, pageProps}: LayoutPropsType) {
     const postImgUrl = pageProps && pageProps.post ? pageProps.post.attributes.media.data.attributes.url : null
+
+    if(!tags || !global || !socials) {
+        return <CustomError error={{status: 404}} />
+    }
 
     return (
         <LayoutComponent>
