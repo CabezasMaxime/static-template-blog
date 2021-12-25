@@ -54,6 +54,15 @@ export const getStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
     let tagResponse: ApiResponse<Tag> = await GetTagBySlug(context.params.slug as string)
 
+    if(!tagResponse) {
+        return {
+            props: {
+                tag: null,
+                error: {status: 404, name: "Not Found", message: "Not Found"}
+            }
+        }
+    }
+
     return {
         props: {
             tag: tagResponse.data ? tagResponse.data : null,

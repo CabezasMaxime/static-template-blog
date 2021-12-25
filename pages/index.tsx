@@ -47,7 +47,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     return {
       props: {
         posts: null,
-        error: {status: 404, name: "not found", message: "not found"}
+        error: {status: 404, name: "Not Found", message: "Not Found"}
       }
     }
   }
