@@ -11,7 +11,7 @@ export async function GetGlobal() {
     try {
         const global = await axios.get(`${process.env.BACKEND_URL}/api/global?populate=*`, headers)
         .then((res) => { return res.data })
-        return global
+        return {...global, error: null}
     } catch(e: any) {
         //console.log("API ERROR GetGlobal", e)
     }
@@ -21,7 +21,7 @@ export async function GetTags() {
     try {
         const tags = await axios.get(`${process.env.BACKEND_URL}/api/tags?populate=*`, headers)
         .then((res) => { return res.data })
-        return tags
+        return {...tags, error: null}
     } catch(e: any) {
         //console.log("API ERROR GetTags", e)
     }
@@ -32,7 +32,7 @@ export async function GetTagBySlug(slug: string) {
         const tag = await axios.get(`${process.env.BACKEND_URL}/api/tags?filters[slug][$eq]=${slug}&populate[0]=posts.media`, headers)
         .then((res) => { return res.data })
         tag.data = tag.data[0]
-        return tag
+        return {...tag, error: null}
     } catch(e: any) {
         //console.log("API ERROR GetTagsBySlug", e)
     }
@@ -42,7 +42,7 @@ export async function GetPosts() {
     try {
         const posts = await axios.get(`${process.env.BACKEND_URL}/api/posts?populate=*`, headers)
         .then((res) => { return res.data })
-        return posts
+        return {...posts, error: null}
     } catch(e: any) {
         //console.log("API ERROR GetPosts", e)
     }
@@ -53,7 +53,7 @@ export async function GetPostBySlug(slug: string) {
         const post = await axios.get(`${process.env.BACKEND_URL}/api/posts?filters[slug][$eq]=${slug}&populate[author][populate][0]=posts,avatar&populate[tags][populate][0]=tags&populate[media][populate][0]=media`, headers)
         .then((res) => { return res.data })
         post.data = post.data[0]
-        return post
+        return {...post, error: null}
     } catch(e: any) {
         //console.log("API ERROR GetPostsBySlug", e)
     }
@@ -63,7 +63,7 @@ export async function GetSocials() {
     try {
         const social = await axios.get(`${process.env.BACKEND_URL}/api/social?populate[0]=socialLink.media`, headers)
         .then((res) => { return res.data })
-        return social.data.attributes.socialLink
+        return {data: [...social.data.attributes.socialLink], error: null}
     } catch(e: any) {
         //console.log("API ERROR GetSocials", e)
     }
@@ -73,7 +73,7 @@ export async function GetContact() {
     try {
         const contact = await axios.get(`${process.env.BACKEND_URL}/api/contact`, headers)
         .then((res) => { return res.data })
-        return contact.data.attributes
+        return {...contact.data.attributes, error: null}
     } catch(e: any) {
         //console.log("API ERROR GetSocials", e)
     }

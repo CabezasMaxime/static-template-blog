@@ -9,4 +9,4 @@ type SocialsData = {
     url: string
 }
 
-export type Socials = SocialsData[]
+export type Socials = Resources<SocialsData[]>

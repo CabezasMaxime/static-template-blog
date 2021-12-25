@@ -49,7 +49,7 @@ export default function Layout({children, tags, global, socials, pageProps}: Lay
             <div style={{position: "absolute", padding: "2rem 1rem", textAlign: "center", width: "100%", background: "grey"}}>
                 <ul className="list-reset">
                     {
-                        socials.filter(e => e.active).map((social, index) => {
+                        socials.data.filter(e => e.active).map((social, index) => {
                             return <li key={`social__${social.id}`}><a href={social.url}><img height="30px" width="30px" src={social.media.data.attributes.url} /></a></li>
                         })
                     }
