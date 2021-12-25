@@ -19,8 +19,8 @@ const Description: AnyStyledComponent = styled.div`
 `
 
 type HomeProps = {
-  posts?: Posts
-  error?: ApiError
+  posts: Posts
+  error: ApiError
 }
 
 const Home: NextPage<HomeProps> = ({posts, error}) => {
@@ -43,7 +43,14 @@ const Home: NextPage<HomeProps> = ({posts, error}) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   let postsReponse: ApiResponse<Posts> = await GetPosts()
-
+  if(!postsReponse) {
+    return {
+      props: {
+        posts: null,
+        error: {status: 404, name: "not found", message: "not found"}
+      }
+    }
+  }
   return {
     props: {
       posts: postsReponse.data ? postsReponse.data : null,
