@@ -28,6 +28,7 @@ const LayoutComponent: AnyStyledComponent = styled.div`
 `
 
 export default function Layout({children, tags, global, socials, pageProps}: LayoutPropsType) {
+    
     const postImgUrl = pageProps && pageProps.post ? pageProps.post.attributes.media.data.attributes.url : null
 
     return (

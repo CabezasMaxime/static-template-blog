@@ -2,6 +2,7 @@ import { createGlobalStyle, DefaultTheme, ThemeProvider } from 'styled-component
 import Layout from '../components/Layout'
 import HeaderSeo from '../components/HeaderSeo'
 import { GetGlobal, GetSocials, GetTags } from '../utils/DataRequest'
+import App from 'next/app'
 
 const GlobalStyle = createGlobalStyle(({theme}) => {
   return `
@@ -115,7 +116,6 @@ const theme: DefaultTheme = {
 }
 
 function MyApp({ Component, pageProps, router, tags, global, socials }) {
-
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -129,12 +129,15 @@ function MyApp({ Component, pageProps, router, tags, global, socials }) {
   )
 }
 
-MyApp.getInitialProps = async (ctx) => {
+MyApp.getInitialProps = async (context) => {
   const tags = await GetTags()
   const global = await GetGlobal()
   const socials = await GetSocials()
+  
+  const appProps = await App.getInitialProps(context);
 
-  return { 
+  return {
+    ...appProps,
     tags: tags.data ? tags.data : null,
     global: global.data ? global.data : null,
     socials: socials ? socials : null
